@@ -8,7 +8,7 @@ import New from './components/pages/New'
 import Search from './components/pages/Search'
 import Login from './components/pages/Login'
 import NotFound from './components/pages/NotFound'
-
+import ProtectedRoute from './components/common/ProtectedRoute'
 
 function App() {
 
@@ -16,10 +16,10 @@ function App() {
     <BrowserRouter>
       <FrontVar />
       <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/ranking" element={<Ranking />} />
-        <Route path="/new" element={<New />} />
-        <Route path="/search" element={<Search />} />
+        <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+        <Route path="/ranking" element={<ProtectedRoute><Ranking /></ProtectedRoute>} />
+        <Route path="/new" element={<ProtectedRoute><New /></ProtectedRoute>} />
+        <Route path="/search" element={<ProtectedRoute><Search /></ProtectedRoute>} />
         <Route path="/login" element={<Login />} />
         <Route path="/*" element={<NotFound/>} />
       </Routes>
