@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Container, Row, Col, Form, Button, Alert, Spinner } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useLogin } from "../../hooks/UseLogin";
 import { LoginRequest } from "../../api/LoginApi";
 
@@ -8,14 +8,16 @@ const Login = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
+    const location = useLocation();
     const { execute: loginExec, loading, error } = useLogin();
+    const from = (location.state as { from?: { pathname: string } })?.from?.pathname ?? "/";
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
             const req: LoginRequest = { username, password };
             await loginExec(req);
-            navigate("/");
+            navigate(from, { replace: true });
         } catch {
             /* エラーはフック内で状態設定済み */
         }
