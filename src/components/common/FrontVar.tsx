@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Container, Nav, Navbar, Spinner } from "react-bootstrap";
 import { Link, useLocation } from "react-router-dom";
 import { checkSession } from "../../api/AuthApi";
+import { logout } from "../../api/LogoutApi";
 import { fetchMenus } from "../../api/MenuApi";
 import { Menu } from "../types/Menu";
 
@@ -84,27 +85,45 @@ const FrontVar = () => {
         );
     } else if (isAuthenticated) {
         rightContent = (
-            <Nav className="me-auto">
-                {menuLoading && (
-                    <Nav.Item className="d-flex align-items-center px-2">
-                        <Spinner animation="border" size="sm" />
-                    </Nav.Item>
-                )}
-                {menuError && (
-                    <Nav.Item className="px-2 text-danger small">
-                        {menuError}
-                    </Nav.Item>
-                )}
-                {menus.map((menu) => (
+            <>
+                <Nav className="me-auto">
+                    {menuLoading && (
+                        <Nav.Item className="d-flex align-items-center px-2">
+                            <Spinner animation="border" size="sm" />
+                        </Nav.Item>
+                    )}
+                    {menuError && (
+                        <Nav.Item className="px-2 text-danger small">
+                            {menuError}
+                        </Nav.Item>
+                    )}
+                    {menus.map((menu) => (
+                        <Nav.Link
+                            as={Link}
+                            to={`/${menu.menu_api}`}
+                            key={menu.menu_api}
+                        >
+                            {menu.menu_name}
+                        </Nav.Link>
+                    ))}
+                </Nav>
+                <Nav>
                     <Nav.Link
-                        as={Link}
-                        to={`/${menu.menu_api}`}
-                        key={menu.menu_api}
+                        as="button"
+                        onClick={() => {
+                            // ログアウト API 呼び出しは非同期に投げるだけにして、
+                            // 画面側は即座にログアウト状態＋リダイレクトする
+                            logout().catch(() => {
+                                /* API エラー時も画面上はログアウト扱いとする */
+                            });
+                            setIsAuthenticated(false);
+                            globalThis.location.replace("/login");
+                        }}
                     >
-                        {menu.menu_name}
+                        ログアウト
                     </Nav.Link>
-                ))}
-            </Nav>
+                </Nav>
+            </>
         );
     } else {
         rightContent = (
