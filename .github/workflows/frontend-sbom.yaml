@@ -22,10 +22,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
       - name: Setup Node (exact version)
-        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
         with:
           node-version: '24'
           cache: 'npm'
@@ -41,7 +41,7 @@ jobs:
 
       - name: Scan SBOM with Grype (Official Action)
         id: grype
-        uses: anchore/scan-action@f6601287cdb1efc985d6b765bbf99cb4c0ac29d8
+        uses: anchore/scan-action@7037fa011853d5a11690026fb85feee79f4c946c
         with:
           sbom: sbom.json
           fail-build: true
